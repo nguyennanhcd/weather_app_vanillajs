@@ -10,7 +10,7 @@
     }
 }
 
-@mixin mq($size) {
+@mixin mqh($size) {
     @media only screen and (min-height: $size) {
         @content;
     }
