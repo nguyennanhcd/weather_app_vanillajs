@@ -12,14 +12,14 @@
 </head>
 <body>
     <main>
-        <h1>Responsive Weather App Powered by the Open Weather A P I</h1>
+        <h1 class="offscreen">Responsive Weather App Powered by the Open Weather A P I</h1>
         <section id="searchBar" class="searchBar">
             <form id="searchBar__form" class="searchBar__form" role="search">
-                <label for="searchBar__text" class="searchBar__text"></label>
+                <label for="searchBar__text" class="offscreen">Enter a new location</label>
                 <input id="searchBar__text" class="searchBar__text" type="text" role="searchbox" size="40" autocomplete="off" placeholder="City, State, Country">
-                <button id="searchBar__button" class="searchBar__button" title="Submit Location" aria-label="Enter Zip Code or City, State, and Country to retrieve wheather conditions">
+                <button id="searchBar__button" class="searchBar__button button" title="Submit Location" aria-label="Enter Zip Code or City, State, and Country to retrieve wheather conditions">
                     <i class="fa fa-search"></i>
-                    <i class="fa fa-sync fa-spin"></i>
+                    <i class="fa fa-sync fa-spin none"></i>
                 </button>
             </form>
         </section>
@@ -32,28 +32,28 @@
         <nav id="navButtons" class="navButtons">
             <button id="getLocation" class="button" title="Get Location" aria-label="Get the current weather conditions for your current location">
                 <i class="fa fa-map-marker-alt"></i>
-                <i class="fa fa-sync fa-spin"></i>
+                <i class="fa fa-sync fa-spin none"></i>
             </button>
             <button id="home" class="button" title="Home weather" aria-label="Get the current weather conditions for your home location">
                 <i class="fa fa-home"></i>
-                <i class="fa fa-sync fa-spin"></i>
+                <i class="fa fa-sync fa-spin none"></i>
             </button>
             <button id="saveLocation" class="button" title="Save Location" aria-label="Save the current location as your home location">
                 <i class="fa fa-save"></i>
-                <i class="fa fa-sync fa-spin"></i>
+                <i class="fa fa-sync fa-spin none"></i>
             </button>
             <button id="unit" class="button" title="Toggle Measurement Units" aria-label="Toggle between metric and imperial measurement units">
                 <i class="fa fa-chart-bar"></i>
-                <i class="fa fa-sync fa-spin"></i>
+                <i class="fa fa-sync fa-spin none"></i>
             </button>
             <button id="refresh" class="button" title="Refresh Weather" aria-label="Refresh the current weather conditions">
                 <i class="fa fa-sync-alt"></i>
-                <i class="fa fa-sync fa-spin"></i>
+                <i class="fa fa-sync fa-spin none"></i>
             </button>
         </nav>
         <hr>
         <section id="dailyForecast" class="dailyForecast" role="region" aria-labelledby="dailyForecast__title">
-            <h2 id="dailyForecast__title" class="dailyForecast__title">Six Day Forecast</h2>
+            <h2 id="dailyForecast__title" class="dailyForecast__title offscreen">Six Day Forecast</h2>
             <div id="dailyForecast__contents" class="dailyForecast__contents"></div>
         </section>
         <p id="confirmation" class="offscreen" aria-live="assertive"></p>

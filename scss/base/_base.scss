@@ -37,3 +37,22 @@ main {
     border-radius: 10px;
     box-shadow: 1px 1px 2.5px $shadowcolor;
 }
+
+img {
+    display: block;
+}
+
+hr {
+    width: 90%;
+    margin:auto;
+    border: 1px solid $bordercolor;
+}
+
+.none {
+    display: none !important;
+}
+
+.block {
+    display: block !important;
+}
+
