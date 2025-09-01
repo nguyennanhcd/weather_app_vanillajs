@@ -2,9 +2,15 @@ import CurrentLocation from './CurrentLocation.js'
 import {
   addSpinner,
   displayError,
-  updateScreenReaderConfirmation
+  updateScreenReaderConfirmation,
+  displayApiError,
+  setPlaceholderText
 } from './domFunctions.js'
-import { setLocationObject, getHomeLocation } from './dataFunctions.js'
+import {
+  setLocationObject,
+  getHomeLocation,
+  cleanText
+} from './dataFunctions.js'
 
 const currentLoc = new CurrentLocation()
 
@@ -16,8 +22,16 @@ const initApp = () => {
   homeButton.addEventListener('click', loadWeather)
   const saveButton = document.getElementById('saveLocation')
   saveButton.addEventListener('click', saveLocation)
+  const unitButton = document.getElementById('unit')
+  unitButton.addEventListener('click', setUnitPref)
+  const refreshButton = document.getElementById('refresh')
+  refreshButton.addEventListener('click', refreshWeather)
+  const locationEntry = document.getElementById('searchBar__form')
+  locationEntry.addEventListener('submit', submitNewLocation)
   // set up
+  setPlaceholderText()
   // load weather
+  loadWeather()
 }
 
 document.addEventListener('DOMContentLoaded', initApp)
@@ -97,6 +111,37 @@ const saveLocation = () => {
     updateScreenReaderConfirmation(
       `Saved ${currentLoc.getName()} as home location`
     )
+  }
+}
+
+const setUnitPref = () => {
+  const unitIcon = document.querySelector('.fa-chart-bar')
+  addSpinner(unitIcon)
+  currentLoc.toggleUnit()
+  updateDataAndDisplay(currentLoc)
+}
+
+const refreshWeather = () => {
+  const refreshIcon = document.querySelector('.fa-sync-alt')
+  addSpinner(refreshIcon)
+  updateDataAndDisplay(currentLoc)
+}
+
+const submitNewLocation = async (event) => {
+  event.preventDefault()
+  const text = document.getElementById('searchBar__text').value
+  const entryText = cleanText(text)
+  if (!entryText.length) return
+  const locationIcon = document.querySelector('.fa-search')
+  addSpinner(locationIcon)
+  const coordsData = await getCoordsFromApi(entryText, currentLoc.getUnit())
+  if (coordsData.cod === 200) {
+    // work with api data
+    const myCoordsObj = {}
+    setLocationObject(currentLoc, myCoordsObj)
+    updateDataAndDisplay(currentLoc)
+  } else {
+    displayApiError(coordsData)
   }
 }
 
