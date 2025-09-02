@@ -4,12 +4,15 @@ import {
   displayError,
   updateScreenReaderConfirmation,
   displayApiError,
-  setPlaceholderText
+  setPlaceholderText,
+  updateDisplay
 } from './domFunctions.js'
 import {
   setLocationObject,
   getHomeLocation,
-  cleanText
+  cleanText,
+  getCoordsFromApi,
+  getWeatherFromCoords
 } from './dataFunctions.js'
 
 const currentLoc = new CurrentLocation()
@@ -135,24 +138,37 @@ const submitNewLocation = async (event) => {
   const locationIcon = document.querySelector('.fa-search')
   addSpinner(locationIcon)
   const coordsData = await getCoordsFromApi(entryText, currentLoc.getUnit())
-  if (coordsData.cod === 200) {
-    // work with api data
-    const myCoordsObj = {}
-    setLocationObject(currentLoc, myCoordsObj)
-    updateDataAndDisplay(currentLoc)
+  if (coordsData) {
+    if (coordsData.cod === 200) {
+      const myCoordsObj = {
+        lat: coordsData.coord.lat,
+        lon: coordsData.coord.lon,
+        name: coordsData.sys.country
+          ? `${coordsData.name}, ${coordsData.sys.country}`
+          : coordsData.name,
+        unit: currentLoc.getUnit()
+      }
+      setLocationObject(currentLoc, myCoordsObj)
+      updateDataAndDisplay(currentLoc)
+    } else {
+      displayApiError(coordsData)
+    }
   } else {
-    displayApiError(coordsData)
+    displayError('Connection Error', 'Error connecting to weather service')
   }
 }
 
 const updateDataAndDisplay = async (locationObj) => {
-  console.log(locationObj)
-  // const weatherJson = await getWeatherFromCoords(locationObj)
-  // if (weatherJson.cod && weatherJson.cod !== 200) {
-  //   const errMsg = weatherJson.message
-  //     ? weatherJson.message
-  //     : 'Error getting weather'
-  //   displayError(errMsg, errMsg)
-  //   return
-  // }
+  const weatherJson = await getWeatherFromCoords(locationObj)
+  if (!weatherJson) {
+    displayError('Connection Error', 'Error connecting to weather service')
+    return
+  }
+  // openweathermap onecall returns object without cod; check for required fields
+  if (!weatherJson.current || !weatherJson.current.weather) {
+    displayError('Weather Error', 'Invalid weather data received')
+    return
+  }
+  // update UI
+  updateDisplay(weatherJson, locationObj)
 }
